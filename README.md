@@ -3,7 +3,7 @@
 
  * send a search query and print the results list
  
- * Choose Title, start episodes, end episodes 
+ * Choose Title, start episode, end episode
  
  * Choose Resolution of the video
  
