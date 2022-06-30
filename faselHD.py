@@ -15,7 +15,7 @@ def random_user_agent(file=os.path.join(os.path.dirname(__file__),'user_agents.t
     return str(user_agent)
 
 def search(user_input):
-    search_URL = "https://www.faselhd.top/?s=" + user_input.strip()
+    search_URL = "https://www.faselhd.club/?s=" + user_input.strip()
     search_result = soup(search_URL)
     results = search_result.select(".postDiv")
     tit_url = [(i.select_one(".h1").text, i.a["href"]) for i in results]
