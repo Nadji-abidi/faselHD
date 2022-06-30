@@ -64,7 +64,7 @@ def download(links, folder):
         print(f"\n\x1b[41m\x1b[37mDownloading \x1b[0m ===> {title}")
         link = getDirectLink(link.find("iframe")["src"])
         videoURL = re.findall("\"file\":\"(.*\.m3u8)\"",link)[0].replace("\\","")
-        vsdownload.save(videoURL, output=f"{folder}/{title}", max_quality=True)
+        vsdownload.save(videoURL, output=os.join(folder,title), max_quality=True)
 
 def main() :
     main_page = search(input("Search : "))
