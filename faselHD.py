@@ -1,23 +1,21 @@
 #! python
 import requests
-import os, sys
-import re
+import os, sys, re, random
 from bs4 import BeautifulSoup as bs
-import random
 from vsdownload import vsdownload
 
 
 soup = lambda url : bs(requests.get(url).content,"html.parser")
 
 def random_user_agent(file=os.path.join(os.path.dirname(__file__),'user_agents.txt')):
-	with open(file, "r") as f:
-		lines = f.readlines()
-		user_agent = random.choice(lines).replace("\n", "")
-		f.close()
-	return str(user_agent)
+    with open(file, "r") as f:
+        lines = f.readlines()
+        user_agent = random.choice(lines).replace("\n", "")
+        f.close()
+    return str(user_agent)
 
 def search(user_input):
-    search_URL = "https://www.faselhd.pro/?s=" + user_input.strip()
+    search_URL = "https://www.faselhd.top/?s=" + user_input.strip()
     search_result = soup(search_URL)
     results = search_result.select(".postDiv")
     tit_url = [(i.select_one(".h1").text, i.a["href"]) for i in results]
@@ -27,8 +25,11 @@ def display_results(lists):
     choises = list(lists.keys())
     for i in range(len(choises)):
         print(f"{i + 1}. \x1b[33m{choises[i]}\x1b[0m")
-    choise = int(input("\n\x1b[41m\x1b[37mChoose one \x1b[0m : "))
-    return choises[choise - 1]
+    try: 
+        choise = int(input("\n\x1b[41m\x1b[37mChoose one \x1b[0m : "))
+        return choises[choise - 1]
+    except (IndexError, ValueError):
+        return False
 
 def seasons(seasonList):
     seasons_num = dict([(i.select_one(".title").text,i.div["data-href"]) for i in seasonList])
@@ -67,12 +68,13 @@ def download(links, folder):
 
 def main() :
     main_page = search(input("Search : "))
-    while main_page == {} : 
+    selected = display_results(main_page)
+    while main_page == {} or not(selected): 
         print("\n\n----- \x1b[41mNo Results\x1b[0m ----\n\n")
         main_page = search(input("Search : "))
-    selected = display_results(main_page)
+        selected = display_results(main_page)
     episodes = select_episodes(main_page[selected])
-    download(episodes, os.path.join(os.getcwd(),selected))
+    download(episodes, os.path.join(os.getenv("HOME"), "Downloads", "Videos",selected))
 
 try : main()
 except KeyboardInterrupt : 
